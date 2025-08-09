@@ -15,7 +15,7 @@ export default function WelcomeScreen() {
     const timer = setTimeout(() => {
       setIsLoading(false);
       // navigation.navigate("Onboarding" as never); // production
-      navigation.navigate("PhoneSignUp" as never); // devalopment 
+      navigation.navigate("dashboard" as never); // devalopment 
     }, 3000);
 
     return () => clearTimeout(timer);

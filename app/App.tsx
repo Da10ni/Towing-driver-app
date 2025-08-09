@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WelcomeScreen from "./index";
 import OTPVerificationWrapper from "./screens/OTPVerification/OTPVerification";
 import PhoneSignUpWrapper from "./screens/PhoneSignUp/PhoneSignUp";
+import Dashboard from "./screens/Dashboard/dashboard";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -31,6 +32,15 @@ export default function App() {
         options={{
           headerShown: false,
           title: "Onboarding",
+        }}
+      />
+
+      <Stack.Screen
+        name="dashboard"
+        component={Dashboard}
+        options={{
+          headerShown: false,
+          title: "dashboard",
         }}
       />
     </Stack.Navigator>

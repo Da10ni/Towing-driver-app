@@ -222,6 +222,58 @@ export const resendVerificationCode = functions.https.onCall(
   }
 );
 
+export const updateDriverStatus = functions.https.onCall(async (request) => {
+  try {
+    const { driverId, status } = request.data;
+
+    if (!driverId) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "driverId is required"
+      );
+    }
+
+    if (typeof status !== "boolean") {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "status must be true or false"
+      );
+    }
+
+    const driverRef = database.ref(`drivers/${driverId}`);
+
+    const snapshot = await driverRef.once("value");
+    if (!snapshot.exists()) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        `Driver ${driverId} not found`
+      );
+    }
+
+    await driverRef.update({
+      status: status,
+      timestamps: Date.now(),
+    });
+    return {
+      success: true,
+      message: `Driver status updated to ${status ? "online" : "offline"}`,
+      driverId: driverId,
+      newStatus: status,
+      updatedAt: Date.now(),
+    };
+  } catch (error) {
+    if (error instanceof functions.https.HttpsError) {
+      throw error;
+    }
+
+    // Generic error
+    throw new functions.https.HttpsError(
+      "internal",
+      "Failed to update driver status"
+    );
+  }
+});
+
 export const createPaymentIntent = functions.https.onCall(
   async (data, context) => {
     try {
